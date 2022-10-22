@@ -83,7 +83,7 @@ double complex perm(int n, double complex **M){
     total += sign * reduced;
     new_gray = bin_index ^ (bin_index / 2);
     gray_diff = old_gray ^ new_gray;
-    gray_diff_index = __builtin_ctzll(gray_diff);
+    gray_diff_index = __builtin_ctz(gray_diff);
     direction = 2 * cmp(old_gray,new_gray);
     for(i=0; i<n; i++){
       row_comb[i] += M[gray_diff_index][i] * direction;
