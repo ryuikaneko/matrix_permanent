@@ -124,6 +124,10 @@ int calc_matA(double complex **matA, double complex **matX,
       }
     }
   }
+//// MI
+//  for(i=0; i<L; i++){
+//    for(j=0; j<L; j++){
+//// CDW
   for(i=0; i<L/2; i++){
     for(j=0; j<L/2; j++){
       matZ[i][j] = 0.0;
@@ -142,16 +146,22 @@ int calc_matA(double complex **matA, double complex **matX,
     }
   }
 //// MI
-//  for(i=0; i<2; i++){
-//    for(j=0; j<2; j++){
+//  for(i=0; i<L; i++){
+//    for(j=0; j<L; j++){
 //// CDW
   for(i=0; i<L/2; i++){
     for(j=0; j<L/2; j++){
+//      matA[i][j] = matZ[i][j];
+//      matA[i][j+L] = -matZ[i][j];
+//      matA[i+L][j] = -matZ[i][j];
+//      matA[i+L][j+L] = matZ[i][j];
       matA[i][j] = matZ[i][j];
       matA[i][j+L/2] = -matZ[i][j];
       matA[i+L/2][j] = -matZ[i][j];
       matA[i+L/2][j+L/2] = matZ[i][j];
     }
+//    matA[i][i+L] += 1.0;
+//    matA[i+L][i] += 1.0;
     matA[i][i+L/2] += 1.0;
     matA[i+L/2][i] += 1.0;
   }
@@ -194,13 +204,15 @@ int main(void){
   double tmax;
   double val;
 
-  L = 20;
+//  L = 10;// MI
+  L = 20;// CDW
   L_A = L/2;
   Nmax = 64;
   tmax = 2.0*L;
 
 // prepare matrix
-  double complex **matA = (double complex**)malloc2d(sizeof(double complex),L,L);
+//  double complex **matA = (double complex**)malloc2d(sizeof(double complex),2*L,2*L);// MI
+  double complex **matA = (double complex**)malloc2d(sizeof(double complex),L,L);// CDW
   double complex **matX = (double complex**)malloc2d(sizeof(double complex),L,L);
   double complex **matY = (double complex**)malloc2d(sizeof(double complex),L,L);
 //  double complex **matZ = (double complex**)malloc2d(sizeof(double complex),L,L);// MI
@@ -211,7 +223,8 @@ int main(void){
     tstep = i*tmax/Nmax;
     calc_matA(matA,matX,matY,matZ,vecEPS,L,L_A,tstep);
 //    print_mat(matA,L);
-    val = perm(L,matA);
+//    val = perm(2*L,matA);// MI
+    val = perm(L,matA);// CDW
     printf("%g %g\n",tstep,-log(val));
   }
 
